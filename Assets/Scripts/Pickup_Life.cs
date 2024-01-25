@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickup : MonoBehaviour
+public class Pickup_Life : MonoBehaviour
 {
     [SerializeField] GameObject pickupPrefab = null;
 
@@ -25,7 +25,7 @@ public class Pickup : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent<Player>(out Player player))
         {
-            player.AddPoints(10);
+            GameManager.Instance.Lives += 1;
         }
 
         Instantiate(pickupPrefab, transform.position, Quaternion.identity);
