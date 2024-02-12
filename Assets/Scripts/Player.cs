@@ -31,10 +31,6 @@ public class Player : MonoBehaviour
         gameStartEvent.Subscribe(OnStartGame);
     }
 
-    void Start()
-    {
-    }
-
     public void AddPoints(int points)
     {
         Score += points;
@@ -51,6 +47,12 @@ public class Player : MonoBehaviour
         transform.rotation = respawn.transform.rotation;
 
         characterController.Reset();
+    }
+
+    public void OnCheckpoint(GameObject checkpoint, GameObject respawn)
+    {
+        respawn.transform.position = checkpoint.transform.position;
+        respawn.transform.rotation = checkpoint.transform.rotation;
     }
 
     public void Damage(float damage)

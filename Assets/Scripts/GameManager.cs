@@ -18,11 +18,12 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] FloatVariable health;
 
     [SerializeField] GameObject respawn;
+    [SerializeField] GameObject endGame;
 
     [Header("Events")]
-    //[SerializeField] IntEvent scoreEvent;
+    [SerializeField] IntEvent scoreEvent;
     [SerializeField] VoidEvent gameStartEvent;
-    [SerializeField] GameObjectEvent respawnEvent;
+     [SerializeField] GameObjectEvent respawnEvent;
 
     [Header("Objects")]
     [SerializeField] GameObject[] pickups;
@@ -35,8 +36,8 @@ public class GameManager : Singleton<GameManager>
         PLAY_GAME,
         RESTART_GAME,
         GAME_OVER,
-        NO_LIVES,
-        WON
+        GAME_WON,
+        NO_LIVES
     }
 
     public State state = State.TITLE;
@@ -80,6 +81,7 @@ public class GameManager : Singleton<GameManager>
     void Update()
     {
         Player player = FindObjectOfType<Player>();
+        var startingPosition = new Vector3(0, 21, -26);
 
         switch (state)
         {
@@ -91,6 +93,9 @@ public class GameManager : Singleton<GameManager>
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
 
+                // reset respawn position
+                //respawn.transform.position = startingPosition;
+
                 state = State.RESTART_GAME;
 
                 break;
@@ -101,7 +106,6 @@ public class GameManager : Singleton<GameManager>
                 gameoverUI_noLives.SetActive(false);
                 winUI.SetActive(false);
 
-                Timer = 60;
                 health.value = 100;
 
                 if (Lives > 1)
@@ -117,7 +121,7 @@ public class GameManager : Singleton<GameManager>
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
                 gameStartEvent.RaiseEvent();
-                respawnEvent.RaiseEvent(respawn);
+                //respawnEvent.RaiseEvent(respawn);
 
                 break;
 
@@ -128,21 +132,22 @@ public class GameManager : Singleton<GameManager>
                 {
                     state = State.GAME_OVER;
                 }
-                if (player.Score == 30)
+
+                if (endGame.activeSelf == false)
                 {
-                    state = State.WON;
+                    state = State.GAME_WON;
                 }
                 break;
 
             case State.RESTART_GAME:
                 Lives = 4;
+                Timer = 60;
 
                 foreach (GameObject pickup in pickups)
                 {
                     pickup.SetActive(true);
                 }
                 player.Score = 0;
-
                 break;
 
             case State.GAME_OVER:
@@ -153,16 +158,16 @@ public class GameManager : Singleton<GameManager>
 
                 break;
 
-            case State.NO_LIVES:
-                gameoverUI.SetActive(false);
-                gameoverUI_noLives.SetActive(true);
+            case State.GAME_WON:
+                winUI.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
 
                 break;
 
-            case State.WON:
-                winUI.SetActive(true);
+            case State.NO_LIVES:
+                gameoverUI.SetActive(false);
+                gameoverUI_noLives.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
 
@@ -180,12 +185,6 @@ public class GameManager : Singleton<GameManager>
     public void OnStartGame()
     {
         state = State.START_GAME;
-
-    }
-
-    public void OnPlayerDead()
-    {
-        state = State.GAME_OVER;
     }
 
     public void OnTitleScreen()

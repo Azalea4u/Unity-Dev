@@ -6,16 +6,6 @@ public class Pickup : MonoBehaviour
 {
     [SerializeField] GameObject pickupPrefab = null;
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         print(collision.gameObject.name);
