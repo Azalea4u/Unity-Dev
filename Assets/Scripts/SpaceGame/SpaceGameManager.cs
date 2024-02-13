@@ -83,6 +83,7 @@ public class SpaceGameManager : Singleton<SpaceGameManager>
                 gameoverUI.SetActive(false);
                 winUI.SetActive(false);
 
+
                 health.value = 100;
 
                 Cursor.lockState = CursorLockMode.Locked;

@@ -7,7 +7,7 @@ public class PlayerShip : MonoBehaviour, IDamagable
     [SerializeField] private PathFollower pathFollower;
     [SerializeField] private IntEvent scoreEvent;
     [SerializeField] private Inventory inventory;
-    [SerializeField] private IntVariable score;
+    [SerializeField] public IntVariable score;
     [SerializeField] private FloatVariable health;
 
     [SerializeField] private GameObject hitPrefab;
